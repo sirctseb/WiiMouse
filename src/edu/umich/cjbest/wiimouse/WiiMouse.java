@@ -15,17 +15,16 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 
 	@Override
 	protected void startup() {
-		// TODO Auto-generated method stub
-		WiiRemoteJ.findRemotes(this, 1);
 		// create remote event handler
 		remoteHandler = new WiiRemoteEventHandler(this);
+		// search for remotes
+		WiiRemoteJ.findRemotes(this, 1);
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Application.launch(WiiMouse.class, args);
 	}
 
