@@ -40,6 +40,7 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		// store remote
 		remote = (WiiRemote)arg0.getWiiDevice();
 		remote.addWiiRemoteListener(remoteHandler);
+		System.out.println("device discovered");
 	}
 
 }
