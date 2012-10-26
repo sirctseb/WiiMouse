@@ -17,6 +17,8 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	protected void startup() {
 		// TODO Auto-generated method stub
 		WiiRemoteJ.findRemotes(this, 1);
+		// create remote event handler
+		remoteHandler = new WiiRemoteEventHandler(this);
 	}
 
 	/**
