@@ -5,9 +5,11 @@ import wiiremotej.event.WRButtonEvent;
 import wiiremotej.event.WRIREvent;
 import wiiremotej.event.WRStatusEvent;
 import wiiremotej.event.WiiRemoteAdapter;
+import javax.media.jai.PerspectiveTransform;
 
 public class WiiRemoteEventHandler extends WiiRemoteAdapter {
 	
+	PerspectiveTransform transform;
 	WiiMouse delegate;
 	
 	WiiRemoteEventHandler(WiiMouse delegate) {
