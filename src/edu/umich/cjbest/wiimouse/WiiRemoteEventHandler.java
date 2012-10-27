@@ -1,5 +1,8 @@
 package edu.umich.cjbest.wiimouse;
 
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
+
 import wiiremotej.IRLight;
 import wiiremotej.event.WRButtonEvent;
 import wiiremotej.event.WRIREvent;
@@ -18,15 +21,38 @@ public class WiiRemoteEventHandler extends WiiRemoteAdapter {
 	
 	@Override
 	public void IRInputReceived(WRIREvent evt) {
-		System.out.println("IRInputReceived");
 		// get lights
 		IRLight[] lights = evt.getIRLights();
 		// check for all four lights
-		if(lights.length == 4) {
+		if(lights[0] != null && lights[1] != null
+				&& lights[2] != null && lights[3] != null) {
+			System.out.println("found four lights");
 			// get lights in correct order
 			lights = orderLights(lights);
+			System.out.println(lights[0].toString());
+			System.out.println(lights[1].toString());
+			System.out.println(lights[2].toString());
+			System.out.println(lights[3].toString());
 			
-			// TODO process perspective
+			// generate transform
+			transform = PerspectiveTransform.getQuadToQuad(
+					lights[0].getX(), lights[0].getY(),
+					lights[1].getX(), lights[1].getY(),
+					lights[2].getX(), lights[2].getY(),
+					lights[3].getX(), lights[3].getY(),
+					0,1,
+					1,1,
+					1,0,
+					0,0);
+			
+			// transform midpoint
+			Point2D half = new Point2D.Double(0.5, 0.5);
+			Point2D midpoint = new Point2D.Double();
+			transform.transform(half, midpoint);
+			System.out.println(midpoint.toString());
+			
+			// notify delegate
+			delegate.RemotePointed(midpoint);
 		}
 	}
 	
@@ -65,11 +91,11 @@ public class WiiRemoteEventHandler extends WiiRemoteAdapter {
 	
 	@Override
 	public void statusReported(WRStatusEvent e) {
-		System.out.println(e.toString());
+		//System.out.println(e.toString());
 	}
 	
 	@Override
 	public void buttonInputReceived(WRButtonEvent e) {
-		System.out.println(e.toString());
+		//System.out.println(e.toString());
 	}
 }
