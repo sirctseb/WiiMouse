@@ -97,5 +97,9 @@ public class WiiRemoteEventHandler extends WiiRemoteAdapter {
 	@Override
 	public void buttonInputReceived(WRButtonEvent e) {
 		//System.out.println(e.toString());
+		// inform delegate of trigger press
+		if(e.wasPressed(WRButtonEvent.B)) {
+			delegate.TriggerPressed();
+		}
 	}
 }

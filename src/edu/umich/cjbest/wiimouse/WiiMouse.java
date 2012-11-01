@@ -5,6 +5,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
@@ -30,6 +31,11 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 			location.getX() * bounds.width,
 			(1-location.getY()) * bounds.height);
 		robot.mouseMove((int)screenLocation.getX(), (int)screenLocation.getY());
+	}
+	
+	void TriggerPressed() {
+		// left mouse click on trigger
+		robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
 	}
 
 	@Override
