@@ -34,8 +34,14 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	}
 	
 	void TriggerPressed() {
-		// left mouse click on trigger
-		robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+		System.out.println("got trigger press, robot mouse pressing");
+		// left mouse down on trigger
+		robot.mousePress(InputEvent.BUTTON1_MASK);
+	}
+	void TriggerReleased() {
+		System.out.println("got trigger release, robot mouse releasing");
+		// left mouse up on trigger up
+		robot.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 
 	@Override
