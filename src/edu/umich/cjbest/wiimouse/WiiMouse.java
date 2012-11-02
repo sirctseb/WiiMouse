@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.io.IOException;
 
 import org.jdesktop.application.Application;
@@ -25,13 +26,19 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	WiiRemoteEventHandler remoteHandler;
 	Robot robot;
 	Rectangle bounds;
+	Point2D history[];
+	int history_length = 2;
+	int history_index = 0;
 	
 	void RemotePointed(Point2D location) {
 		Point2D screenLocation = new Point2D.Double(
 			bounds.getMinX() + location.getX() * bounds.width,
 			bounds.getMinY() + (1-location.getY()) * bounds.height);
 		System.out.println(screenLocation.toString());
-		robot.mouseMove((int)screenLocation.getX(), (int)screenLocation.getY());
+		//robot.mouseMove((int)screenLocation.getX(), (int)screenLocation.getY());
+		addPoint(screenLocation);
+		Point2D avg = getAveragePoint();
+		robot.mouseMove((int)avg.getX(), (int)avg.getY());
 	}
 	
 	void TriggerPressed() {
@@ -43,6 +50,16 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		System.out.println("got trigger release, robot mouse releasing");
 		// left mouse up on trigger up
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
+	}
+	void PlusPressed() {
+		System.out.println("plus pressed, increasing avg length");
+		history_length++;
+	}
+	void MinusPressed() {
+		System.out.println("minus pressed, decreasing avg length");
+		if(history_length > 1) {
+			history_length--;
+		}
 	}
 
 	@Override
@@ -64,6 +81,31 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		// search for remotes
 		WiiRemoteJ.findRemotes(this, 1);
 		System.out.println("started finding remotes");
+		
+		// initialize point history
+		history = new Point2D.Double[100];
+	}
+	
+	void addPoint(Point2D point) {
+		System.out.println(history_index);
+		history[history_index] = point;
+		history_index = (history_index+1) % history_length;
+	}
+	Point2D getAveragePoint() {
+		Point2D.Double result = new Point2D.Double();
+		double x = 0;
+		double y = 0;
+		for(int i = 0; i < history_length; i++) {
+			if(history[i] == null) {
+				history[i] = new Point2D.Double();
+			}
+			x += history[i].getX();
+			y += history[i].getY();
+		}
+		x /= history_length;
+		y /= history_length;
+		result.setLocation(x, y);
+		return result;
 	}
 
 	/**
