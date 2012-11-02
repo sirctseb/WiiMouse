@@ -28,8 +28,9 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	
 	void RemotePointed(Point2D location) {
 		Point2D screenLocation = new Point2D.Double(
-			location.getX() * bounds.width,
-			(1-location.getY()) * bounds.height);
+			bounds.getMinX() + location.getX() * bounds.width,
+			bounds.getMinY() + (1-location.getY()) * bounds.height);
+		System.out.println(screenLocation.toString());
 		robot.mouseMove((int)screenLocation.getX(), (int)screenLocation.getY());
 	}
 	
@@ -48,8 +49,11 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	protected void startup() {
 		// create robot
 		try {
+			//GraphicsDevice screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[1];
+			bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[1].getDefaultConfiguration().getBounds();
 			GraphicsDevice screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-			bounds = screen.getDefaultConfiguration().getBounds();
+			//bounds = screen.getDefaultConfiguration().getBounds();
+			System.out.println(bounds.toString());
 			robot = new Robot(screen);
 		} catch (AWTException e) {
 			// TODO Auto-generated catch block
