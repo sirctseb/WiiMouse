@@ -29,10 +29,6 @@ public class WiiRemoteEventHandler extends WiiRemoteAdapter {
 			System.out.println("found four lights");
 			// get lights in correct order
 			lights = orderLights(lights);
-			System.out.println(lights[0].toString());
-			System.out.println(lights[1].toString());
-			System.out.println(lights[2].toString());
-			System.out.println(lights[3].toString());
 			
 			// generate transform
 			transform = PerspectiveTransform.getQuadToQuad(
