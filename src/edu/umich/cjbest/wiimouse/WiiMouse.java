@@ -9,6 +9,9 @@ import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.io.IOException;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -84,6 +87,19 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		
 		// initialize point history
 		history = new Point2D.Double[100];
+		
+		Timer timer = new Timer();
+		class ClockTimer extends TimerTask {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				System.out.println(new Date().toString());
+			}
+			
+		}
+		ClockTimer task = new ClockTimer();
+		timer.schedule(task, 0, 100);
 	}
 	
 	void addPoint(Point2D point) {
