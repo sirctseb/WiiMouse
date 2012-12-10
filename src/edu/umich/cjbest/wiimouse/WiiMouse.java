@@ -93,6 +93,7 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		
 		// create prefs window
 		prefsPanel = new PrefsPanel();
+		prefsPanel.delegate = this;
 		show(prefsPanel);
 	}
 	
@@ -122,6 +123,8 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 				e.printStackTrace();
 			}
 		//}
+	}
+	public void selectMonitor(int screen) {
 	}
 	
 	void addPoint(Point2D point) {
