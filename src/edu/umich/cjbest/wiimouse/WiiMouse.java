@@ -12,6 +12,8 @@ import java.io.IOException;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
+import edu.umich.cjbest.wiimouse.gui.PrefsPanel;
+
 import osxadapter.OSXAdapter;
 
 import wiiremotej.IRSensitivitySettings;
@@ -30,6 +32,7 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	Point2D history[];
 	int history_length = 2;
 	int history_index = 0;
+	PrefsPanel prefsPanel;
 	
 	void RemotePointed(Point2D location) {
 		Point2D screenLocation = new Point2D.Double(
@@ -87,11 +90,17 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		
 		// initialize point history
 		history = new Point2D.Double[100];
+		
+		// create prefs window
+		prefsPanel = new PrefsPanel();
+		show(prefsPanel);
 	}
 	
 	public boolean quitApp() {
 		// TODO disconnect remote
-		remote.disconnect();
+		if(remote != null) {
+			remote.disconnect();
+		}
 
 		exit();
 		
