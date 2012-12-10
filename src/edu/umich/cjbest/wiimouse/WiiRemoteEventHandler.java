@@ -1,7 +1,6 @@
 package edu.umich.cjbest.wiimouse;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 
 import wiiremotej.IRLight;
 import wiiremotej.event.WRButtonEvent;

@@ -7,7 +7,6 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,9 +16,6 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
 import osxadapter.OSXAdapter;
-
-//import apple.dts.samplecode.osxadapter.OSXAdapter;
-//import OSXAdapter;
 
 import wiiremotej.IRSensitivitySettings;
 import wiiremotej.WiiRemote;
@@ -45,7 +41,6 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 			bounds.getMinX() + location.getX() * bounds.width,
 			bounds.getMinY() + (1-location.getY()) * bounds.height);
 		System.out.println(screenLocation.toString());
-		//robot.mouseMove((int)screenLocation.getX(), (int)screenLocation.getY());
 		addPoint(screenLocation);
 		Point2D avg = getAveragePoint();
 		robot.mouseMove((int)avg.getX(), (int)avg.getY());
