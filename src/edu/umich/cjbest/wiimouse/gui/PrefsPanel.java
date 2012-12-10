@@ -1,7 +1,9 @@
 package edu.umich.cjbest.wiimouse.gui;
 
+import java.awt.FlowLayout;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
@@ -20,10 +22,12 @@ public class PrefsPanel extends JPanel {
 		
 		final GraphicsDevice[] screens = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 		
+		setLayout(new FlowLayout());
+		
 		// create radio buttons for monitors
 		for (GraphicsDevice s : screens) {
-			s.getDefaultConfiguration().getBounds();
-			JRadioButton newButton = new JRadioButton("What's up?");
+			Rectangle bounds = s.getDefaultConfiguration().getBounds();
+			JRadioButton newButton = new JRadioButton(String.format("%d, %d", bounds.width, bounds.height));
 			monitorButtons.add(newButton);
 			this.add(newButton);
 		}
