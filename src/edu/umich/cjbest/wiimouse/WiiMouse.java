@@ -67,18 +67,8 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 
 	@Override
 	protected void startup() {
-		// create robot
-		try {
-			//GraphicsDevice screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[1];
-			bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[1].getDefaultConfiguration().getBounds();
-			GraphicsDevice screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-			//bounds = screen.getDefaultConfiguration().getBounds();
-			System.out.println(bounds.toString());
-			robot = new Robot(screen);
-		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// default to primary monitor
+		selectMonitor(0);
 		// create remote event handler
 		remoteHandler = new WiiRemoteEventHandler(this);
 		// search for remotes
@@ -124,7 +114,14 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 			}
 		//}
 	}
-	public void selectMonitor(int screen) {
+	public void selectMonitor(int monitor) {
+		bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[monitor].getDefaultConfiguration().getBounds();
+		GraphicsDevice screen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		try {
+			robot = new Robot(screen);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	void addPoint(Point2D point) {
