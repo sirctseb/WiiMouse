@@ -16,6 +16,11 @@ import java.util.Date;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 
+import osxadapter.OSXAdapter;
+
+//import apple.dts.samplecode.osxadapter.OSXAdapter;
+//import OSXAdapter;
+
 import wiiremotej.IRSensitivitySettings;
 import wiiremotej.WiiRemote;
 import wiiremotej.WiiRemoteJ;
@@ -50,10 +55,9 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		System.out.println("got trigger press, robot mouse pressing");
 		// left mouse down on trigger
 		robot.mousePress(InputEvent.BUTTON1_MASK);
+		
 		try {
-			logFileWriter.write("mouse down at" + new Date().toString());
-			logFileWriter.flush();
-			logFileWriter.close();
+			logFileWriter.write("mouse down at\t" + new Date().getTime() + "\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,6 +66,12 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		System.out.println("got trigger release, robot mouse releasing");
 		// left mouse up on trigger up
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
+
+		try {
+			logFileWriter.write("mouse up at\t" + new Date().getTime() + "\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	void PlusPressed() {
 		System.out.println("plus pressed, increasing avg length");
@@ -94,6 +104,9 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		WiiRemoteJ.findRemotes(this, 1);
 		System.out.println("started finding remotes");
 		
+		// register for events
+		registerForMacOSXEvents();
+		
 		// create log file
 		try {
 			logFileWriter = new FileWriter(new File("WiiMouseLog.txt"));
@@ -103,6 +116,40 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		
 		// initialize point history
 		history = new Point2D.Double[100];
+	}
+	
+	public boolean quitApp() {
+		// TODO disconnect remote
+		remote.disconnect();
+		
+		// close log file
+		try {
+			logFileWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		exit();
+		
+		return false;
+	}
+	
+	/*
+	 * MAC OS X HOOKS
+	 */	
+	private void registerForMacOSXEvents() {
+		//if (Util.MAC_OS_X) {
+	        try {
+				OSXAdapter.setQuitHandler(this, WiiMouse.class.getDeclaredMethod("quitApp", (Class[])null));				
+				/*if (!Util.INSIDE_APP_BUNDLE) {
+					OSXAdapter.setAboutHandler(af, AboutWindow.class.getDeclaredMethod("about", (Class[])null));
+				}
+				OSXAdapter.setPreferencesHandler(pf, PreferencesWindow.class.getDeclaredMethod("preferences", (Class[])null));*/
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		//}
 	}
 	
 	void addPoint(Point2D point) {
