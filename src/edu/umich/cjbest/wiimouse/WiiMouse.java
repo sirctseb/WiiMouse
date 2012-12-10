@@ -8,10 +8,10 @@ import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -32,6 +32,8 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	Point2D history[];
 	int history_length = 2;
 	int history_index = 0;
+	// log file writer
+	FileWriter logFileWriter;
 	
 	void RemotePointed(Point2D location) {
 		Point2D screenLocation = new Point2D.Double(
@@ -48,6 +50,13 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		System.out.println("got trigger press, robot mouse pressing");
 		// left mouse down on trigger
 		robot.mousePress(InputEvent.BUTTON1_MASK);
+		try {
+			logFileWriter.write("mouse down at" + new Date().toString());
+			logFileWriter.flush();
+			logFileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	void TriggerReleased() {
 		System.out.println("got trigger release, robot mouse releasing");
@@ -85,21 +94,15 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		WiiRemoteJ.findRemotes(this, 1);
 		System.out.println("started finding remotes");
 		
+		// create log file
+		try {
+			logFileWriter = new FileWriter(new File("WiiMouseLog.txt"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		// initialize point history
 		history = new Point2D.Double[100];
-		
-		Timer timer = new Timer();
-		class ClockTimer extends TimerTask {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				System.out.println(new Date().toString());
-			}
-			
-		}
-		ClockTimer task = new ClockTimer();
-		timer.schedule(task, 0, 100);
 	}
 	
 	void addPoint(Point2D point) {
