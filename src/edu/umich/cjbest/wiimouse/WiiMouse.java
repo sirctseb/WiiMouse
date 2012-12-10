@@ -7,10 +7,7 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -33,8 +30,6 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	Point2D history[];
 	int history_length = 2;
 	int history_index = 0;
-	// log file writer
-	FileWriter logFileWriter;
 	
 	void RemotePointed(Point2D location) {
 		Point2D screenLocation = new Point2D.Double(
@@ -50,23 +45,11 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		System.out.println("got trigger press, robot mouse pressing");
 		// left mouse down on trigger
 		robot.mousePress(InputEvent.BUTTON1_MASK);
-		
-		try {
-			logFileWriter.write("mouse down at\t" + new Date().getTime() + "\n");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	void TriggerReleased() {
 		System.out.println("got trigger release, robot mouse releasing");
 		// left mouse up on trigger up
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
-
-		try {
-			logFileWriter.write("mouse up at\t" + new Date().getTime() + "\n");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	void PlusPressed() {
 		System.out.println("plus pressed, increasing avg length");
@@ -102,13 +85,6 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		// register for events
 		registerForMacOSXEvents();
 		
-		// create log file
-		try {
-			logFileWriter = new FileWriter(new File("WiiMouseLog.txt"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		// initialize point history
 		history = new Point2D.Double[100];
 	}
@@ -116,15 +92,7 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	public boolean quitApp() {
 		// TODO disconnect remote
 		remote.disconnect();
-		
-		// close log file
-		try {
-			logFileWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+
 		exit();
 		
 		return false;
