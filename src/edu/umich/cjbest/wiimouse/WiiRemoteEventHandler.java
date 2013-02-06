@@ -105,5 +105,8 @@ public class WiiRemoteEventHandler extends WiiRemoteAdapter {
 		if(e.wasPressed(WRButtonEvent.MINUS)) {
 			delegate.MinusPressed();
 		}
+		if(e.wasPressed(WRButtonEvent.A)) {
+			delegate.APressed();
+		}
 	}
 }

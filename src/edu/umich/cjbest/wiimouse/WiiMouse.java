@@ -6,6 +6,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
@@ -63,6 +64,13 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		if(history_length > 1) {
 			history_length--;
 		}
+	}
+	void APressed() {
+		System.out.println("A pressed, robot space pressing");
+		// space on A button
+		robot.keyPress(KeyEvent.VK_SPACE);
+		// TODO I guess we have to do this, but I don't actually know
+		robot.keyRelease(KeyEvent.VK_SPACE);
 	}
 
 	@Override
