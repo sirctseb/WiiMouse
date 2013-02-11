@@ -72,6 +72,12 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		// TODO I guess we have to do this, but I don't actually know
 		robot.keyRelease(KeyEvent.VK_SPACE);
 	}
+	void OnePressed() {
+		System.out.println("1 pressed, robot g pressing");
+		// g on 1 button
+		robot.keyPress(KeyEvent.VK_G);
+		robot.keyRelease(KeyEvent.VK_G);
+	}
 
 	@Override
 	protected void startup() {
