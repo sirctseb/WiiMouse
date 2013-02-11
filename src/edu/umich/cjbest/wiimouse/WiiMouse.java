@@ -38,7 +38,9 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	void RemotePointed(Point2D location) {
 		Point2D screenLocation = new Point2D.Double(
 			bounds.getMinX() + location.getX() * bounds.width,
-			bounds.getMinY() + (1-location.getY()) * bounds.height);
+			// go to 4 px at the minimum. this prevents the menu bar from showing when you
+			// go close to the top of the screen
+			Math.max(bounds.getMinY() + (1-location.getY()) * bounds.height, 4));
 		System.out.println(screenLocation.toString());
 		addPoint(screenLocation);
 		Point2D avg = getAveragePoint();
