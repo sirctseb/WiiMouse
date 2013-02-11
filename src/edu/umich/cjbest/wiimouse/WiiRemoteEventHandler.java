@@ -18,6 +18,11 @@ public class WiiRemoteEventHandler extends WiiRemoteAdapter {
 		this.delegate = delegate;
 	}
 	
+	// clamp function
+	static double clamp(double value, double low, double high) {
+		return value < low ? low : (value > high ? high : value);
+	}
+	
 	@Override
 	public void IRInputReceived(WRIREvent evt) {
 		// get lights
@@ -46,6 +51,8 @@ public class WiiRemoteEventHandler extends WiiRemoteAdapter {
 			transform.transform(half, midpoint);
 			System.out.println(midpoint.toString());
 			
+			// clamp to [0,1]
+			midpoint.setLocation(clamp(midpoint.getX(), 0, 1), clamp(midpoint.getY(), 0, 1));
 			// notify delegate
 			delegate.RemotePointed(midpoint);
 		}
