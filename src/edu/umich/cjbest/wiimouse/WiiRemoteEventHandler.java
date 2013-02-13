@@ -93,7 +93,7 @@ public class WiiRemoteEventHandler extends WiiRemoteAdapter {
 	
 	@Override
 	public void statusReported(WRStatusEvent e) {
-		//System.out.println(e.toString());
+		delegate.StatusReported(e);
 	}
 	
 	@Override

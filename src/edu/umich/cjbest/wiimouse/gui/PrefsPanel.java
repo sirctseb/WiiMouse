@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JProgressBar;
+import javax.swing.plaf.ProgressBarUI;
 
 import edu.umich.cjbest.wiimouse.WiiMouse;
 
@@ -39,6 +41,8 @@ public class PrefsPanel extends JPanel {
 		}
 	}
 	
+	private JProgressBar batteryBar;
+	
 	public PrefsPanel() {
 		super(null);
 		
@@ -55,5 +59,11 @@ public class PrefsPanel extends JPanel {
 			monitorGroup.add(newButton);
 			this.add(newButton);
 		}
+		batteryBar = new JProgressBar(0,100);
+		this.add(batteryBar);
+	}
+	
+	public void setBattery(double level) {
+		batteryBar.setValue((int)(level*100));
 	}
 }

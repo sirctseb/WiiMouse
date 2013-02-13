@@ -21,6 +21,7 @@ import wiiremotej.IRSensitivitySettings;
 import wiiremotej.WiiRemote;
 import wiiremotej.WiiRemoteJ;
 import wiiremotej.event.WRIREvent;
+import wiiremotej.event.WRStatusEvent;
 import wiiremotej.event.WiiDeviceDiscoveredEvent;
 import wiiremotej.event.WiiDeviceDiscoveryListener;
 
@@ -79,6 +80,9 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		// g on 1 button
 		robot.keyPress(KeyEvent.VK_G);
 		robot.keyRelease(KeyEvent.VK_G);
+	}
+	void StatusReported(WRStatusEvent e) {
+		prefsPanel.setBattery(e.getBatteryLevel());
 	}
 
 	@Override
