@@ -9,9 +9,11 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.io.IOException;
+import java.util.EventObject;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.Application.ExitListener;
 
 import edu.umich.cjbest.wiimouse.gui.PrefsPanel;
 
@@ -25,7 +27,7 @@ import wiiremotej.event.WRStatusEvent;
 import wiiremotej.event.WiiDeviceDiscoveredEvent;
 import wiiremotej.event.WiiDeviceDiscoveryListener;
 
-public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscoveryListener {
+public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscoveryListener, ExitListener {
 	
 	private WiiRemote remote;
 	WiiRemoteEventHandler remoteHandler;
@@ -87,6 +89,9 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 
 	@Override
 	protected void startup() {
+		// watch for exits coming from closing the gui window
+		this.addExitListener(this);
+		
 		// default to primary monitor
 		selectMonitor(0);
 		// create remote event handler
@@ -108,14 +113,19 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 	}
 	
 	public boolean quitApp() {
-		// TODO disconnect remote
-		if(remote != null) {
-			remote.disconnect();
-		}
+		
+		disconnectRemotes();
 
 		exit();
 		
 		return false;
+	}
+	private void disconnectRemotes() {
+		// disconnect remote
+		if(remote != null) {
+			remote.disconnect();
+			remote = null;
+		}
 	}
 	
 	/*
@@ -222,6 +232,17 @@ public class WiiMouse extends SingleFrameApplication implements WiiDeviceDiscove
 		} else {
 			System.out.println("discovered non-WiiRemote");
 		}
+	}
+
+	@Override
+	public boolean canExit(EventObject arg0) {
+		return true;
+	}
+
+	@Override
+	public void willExit(EventObject arg0) {
+		// disconnect remotes
+		disconnectRemotes();
 	}
 
 }
