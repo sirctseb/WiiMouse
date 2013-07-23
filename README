@@ -1,0 +1,4 @@
+Needs bluecove version that OSX 10.8.4 broke.
+See http://www.uweschmidt.org/wiimote-whiteboard/comment-page-45#comment-246167
+
+Need to set VM argument -d32 because for compatibility with bluetooth library
